@@ -1,4 +1,5 @@
 let SCORE = 0;
+let score = document.getElementById('score');
 
 let ghosts = document.querySelectorAll(".ghost");
 for (let i = 0, ghost; ghost = ghosts[i]; i++) {
@@ -6,9 +7,10 @@ for (let i = 0, ghost; ghost = ghosts[i]; i++) {
         let opacity = window.getComputedStyle(ghost).opacity;
         console.log("opacity " + i + " = " + opacity);
         if (opacity !== "0") {
-            ghost.style.animation = "up 0s";
-            ghost.style.opacity = "0";
-            let score = document.getElementById('score');
+            if (ghosts[i].classList.contains('down')) ghosts[i].classList.remove('down');
+            if (ghosts[i].classList.contains('up')) ghosts[i].classList.remove('up');
+            ghost.classList.add('click');
+            ghost.classList.remove('click');
             score.textContent = "" + ++SCORE;
         }
     };
@@ -23,18 +25,15 @@ function getRandomTime() {
     return Math.floor(Math.random() * (2000));
 }
 
-let upriseGhost = setTimeout(function uprise () {
+setInterval(function () {
     let i = getRandomGhost();
     console.log("ghost: " + i);
     console.log("time: " + getRandomTime());
-    ghosts[i].style.animation = "up 500ms linear";
-    ghosts[i].style.opacity = "1";
-    // ghosts[i].style.animation = "down 2000ms linear";
-    // ghosts[i].style.opacity = "0";
+    if (ghosts[i].classList.contains('down')) ghosts[i].classList.remove('down');
+    ghosts[i].classList.add('up');
     setTimeout(function () {
-        ghosts[i].style.animation = "down 1000ms linear";
-        ghosts[i].style.opacity = "0";
-    }, 2000);
-    upriseGhost = setTimeout(uprise, getRandomTime());
-}, getRandomTime());
+        ghosts[i].classList.add('down');
+        ghosts[i].classList.remove('up');
+    }, 1000);
+}, 1500);
 
